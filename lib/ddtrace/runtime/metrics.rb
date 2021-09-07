@@ -64,12 +64,20 @@ module Datadog
           end
         end
         try_flush { gc_metrics.each { |metric, value| gauge(metric, value) } if Core::Environment::GC.available? }
+
+        try_flush do
+
+        end
       end
 
       def gc_metrics
         Core::Environment::GC.stat.flat_map do |k, v|
           nested_gc_metric(Ext::Runtime::Metrics::METRIC_GC_PREFIX, k, v)
         end.to_h
+      end
+
+      def ruby_vm_metrics
+
       end
 
       def try_flush
